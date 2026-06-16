@@ -1,0 +1,6 @@
+[server]
+maxUploadSize = 4096        # MB — supports files up to 4 GB
+maxMessageSize = 4096       # MB — WebSocket message size must match
+
+[browser]
+gatherUsageStats = false
