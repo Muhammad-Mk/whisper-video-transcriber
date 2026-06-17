@@ -1,0 +1,37 @@
+services:
+  whisper:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: whisper-transcriber:latest
+    container_name: whisper-transcriber
+    restart: unless-stopped
+    ports:
+      - "8501:8501"
+    volumes:
+      # Persists transcript output across container restarts
+      - whisper-output:/app/output
+      # Persists downloaded model weights — avoids re-downloading on restart
+      - whisper-models:/app/.cache/huggingface
+    networks:
+      - whisper-net
+    environment:
+      - PYTHONUNBUFFERED=1
+    deploy:
+      resources:
+        limits:
+          memory: 16G
+          cpus: "8"
+        reservations:
+          memory: 4G
+
+volumes:
+  whisper-output:
+    name: whisper-output
+  whisper-models:
+    name: whisper-models
+
+networks:
+  whisper-net:
+    name: whisper-net
+    driver: bridge
