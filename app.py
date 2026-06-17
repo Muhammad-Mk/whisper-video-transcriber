@@ -45,11 +45,11 @@ with st.sidebar:
     st.divider()
 
     model_options = {
-        "large-v3-turbo  (Recommended — fast & accurate)": "mlx-community/whisper-large-v3-turbo",
-        "large-v3        (Best accuracy, slower)":         "mlx-community/whisper-large-v3",
-        "medium          (Balanced)":                      "mlx-community/whisper-medium",
-        "small           (Faster, lighter)":               "mlx-community/whisper-small",
-        "tiny            (Fastest, for testing)":          "mlx-community/whisper-tiny",
+        "large-v3-turbo  (Recommended — fast & accurate)": "large-v3-turbo",
+        "large-v3        (Best accuracy, slower)":         "large-v3",
+        "medium          (Balanced)":                      "medium",
+        "small           (Faster, lighter)":               "small",
+        "tiny            (Fastest, for testing)":          "tiny",
     }
     selected_model_label = st.selectbox("Model", list(model_options.keys()), index=0)
     model = model_options[selected_model_label]
@@ -96,7 +96,7 @@ with st.sidebar:
     )
 
     st.divider()
-    st.caption("🖥️ Running on Apple M4 Pro · MLX GPU")
+    st.caption("🖥️ faster-whisper · Auto-detects CUDA or CPU")
     st.caption("Models cached at `~/.cache/huggingface/hub/`")
 
 # ── Main — Header ─────────────────────────────────────────────────────────────
@@ -177,13 +177,12 @@ if run and uploaded_files:
         except Exception:
             pass
 
-        # Approximate real-time multiplier per model (M4 Pro GPU benchmarks)
+        # Approximate real-time multiplier per model on CPU (Xeon / server benchmarks)
         speed_map = {
-            "whisper-tiny": 80, "whisper-base": 60, "whisper-small": 40,
-            "whisper-medium": 20, "whisper-large-v3-turbo": 15, "whisper-large-v3": 8,
+            "tiny": 30, "base": 20, "small": 12,
+            "medium": 7, "large-v3-turbo": 5, "large-v3": 3,
         }
-        model_key = model.split("/")[-1]
-        speed_x = speed_map.get(model_key, 12)
+        speed_x = speed_map.get(model, 5)
         expected_secs = (audio_duration / speed_x) if audio_duration else None
 
         t0 = time.time()
@@ -469,4 +468,4 @@ if run and uploaded_files:
 # ── Footer ─────────────────────────────────────────────────────────────────────
 
 st.divider()
-st.caption("mlx-whisper 0.4.3 · mlx 0.31.2 · Streamlit 1.58.0 · Apple M4 Pro GPU · All processing is local")
+st.caption("faster-whisper · Streamlit 1.58.0 · Auto-detects CUDA GPU or CPU · All processing is local")
