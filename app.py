@@ -102,7 +102,7 @@ with st.sidebar:
 # ── Main — Header ─────────────────────────────────────────────────────────────
 
 st.markdown('<p class="main-title">🎙️ Whisper Transcriber</p>', unsafe_allow_html=True)
-st.markdown('<p class="sub-title">Local speech-to-text powered by mlx-whisper on Apple Silicon GPU · No data leaves your machine</p>', unsafe_allow_html=True)
+st.markdown('<p class="sub-title">Local speech-to-text powered by faster-whisper · No data leaves your machine</p>', unsafe_allow_html=True)
 
 # ── Main — File Upload ────────────────────────────────────────────────────────
 
@@ -114,6 +114,9 @@ uploaded_files = st.file_uploader(
     accept_multiple_files=True,
     help=f"Supported: {', '.join('.' + e for e in ACCEPTED_TYPES)} · Max 4 GB per file",
 )
+
+if not uploaded_files:
+    st.caption("Large files (100 MB+) will show a browser upload bar while transferring to the server — this is normal network upload, not a hang.")
 
 # ── Main — Run Button ─────────────────────────────────────────────────────────
 
